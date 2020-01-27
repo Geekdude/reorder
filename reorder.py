@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-This script renames, reorders, adds, and removes files in a directory with a numbering scheme.
+This script renames, reorders, adds, and removes files in a directory with a numerical naming scheme.
 '''
 import re
 import os
@@ -29,7 +29,9 @@ def get_previous_name(files, id):
     return [f for f in files if re.match(f'^{id}', f)]
 
 def main(argv):
-    parser = argparse.ArgumentParser(description="""Script to rename and reorder numerical files.""")
+    parser = argparse.ArgumentParser(description="""Script to rename, reorder, add, and remove files in a directory with a numerical naming scheme.
+    Run the program and provide a directory with the numbered files. A text buffer will be opened with the current files in the folder. Reorder, rename, add, or delete files in the buffer. Do not change the numbered part of the filename, these numbers will be recalculated and are used to match renamed files. Save and exit the editor. Then the program with perform the operations to the files in the directory.
+    To cancel the operation, save an empty buffer.""")
     parser.add_argument('directory', help='The target directory')
     parser.add_argument('-a', '--add', help='Add unnumbered files to numbering', dest='add', action='store_true')
     parser.add_argument('-n', '--nono', help='Do not make changes', action='store_true')
