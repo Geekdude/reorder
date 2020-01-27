@@ -29,11 +29,11 @@ def get_previous_name(files, id):
     return [f for f in files if re.match(f'^{id}', f)]
 
 def main(argv):
-    parser = argparse.ArgumentParser(description="""Script to rename and reorder numerical files""")
-    parser.add_argument('directory', help='The directory to reorder files.')
+    parser = argparse.ArgumentParser(description="""Script to rename and reorder numerical files.""")
+    parser.add_argument('directory', help='The target directory')
     parser.add_argument('-a', '--add', help='Add unnumbered files to numbering', dest='add', action='store_true')
-    parser.add_argument('-n', '--nono', help='Do not make changes.', action='store_true')
-    parser.add_argument('-v', '--verbose', help='verbose mode', action='store_true')
+    parser.add_argument('-n', '--nono', help='Do not make changes', action='store_true')
+    parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
     args = parser.parse_args(argv[1:])
 
     renamed = 0
