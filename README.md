@@ -87,7 +87,7 @@ The directory now looks like:
     ├── 4_future_work.tex
     └── 5_conclusion.tex
 
-Lets say I now want to delete the future work chapter, add an abstract, and reorder the first and second topic.
+Let's say I now want to delete the future work chapter, add an abstract, and reorder the first and second topic.
 First launch the reorder program again with `reorder chapters`. I am presented with the buffer:
 
     1_introduction.tex
@@ -259,3 +259,6 @@ If I run `reorder -al temp dir`, I am presented with the buffer:
 
 
 Lastly, all of these options can be applied the same way for use on directories instead of files using the `-d` flag.
+
+## Acknowledgements 
+Thank you to Jonathan Ambrose who helped come up with the idea for the script and who added many additional features to the script.
