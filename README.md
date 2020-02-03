@@ -20,9 +20,9 @@ Copy `reorder.py` to `~/bin` or some other folder in your `$PATH`. Optionally yo
     with a numerical naming scheme. Run the program and provide a directory with
     the numbered files/directories. A text buffer will be opened with the current
     files/directories in the folder using the editor specified by the EDITOR
-    environment variable. If EDITOR is not set, vim will be used by default.
+    environment variable. If EDITOR is not set, Vim will be used by default.
     Reorder, rename, add, or delete files in the buffer. Do not change the
-    numbered part of the file/directory name, these numbers will be recalculated
+    numbered part of the file/directory name; these numbers will be recalculated
     and are used to match renamed files/directories. Save and exit the editor.
     Then the program with perform the operations to the files/directories in the
     directory. To cancel the operation, save an empty buffer.
@@ -261,4 +261,4 @@ If I run `reorder -al temp dir`, I am presented with the buffer:
 Lastly, all of these options can be applied the same way for use on directories instead of files using the `-d` flag.
 
 ## Acknowledgements 
-Thank you to Jonathan Ambrose who helped come up with the idea for the script and who added many additional features to the script.
+Thank you to Jonathan Ambrose who helped come up with the idea for the script and added several additional features to the script.

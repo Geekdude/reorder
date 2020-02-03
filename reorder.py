@@ -60,9 +60,9 @@ def main(argv):
     parser = argparse.ArgumentParser(description="""Script to rename, reorder, add, and remove files/directories in a directory with a numerical naming scheme.
     Run the program and provide a directory with the numbered files/directories.
     A text buffer will be opened with the current files/directories in the folder using the editor specified by the EDITOR environment variable.
-    If EDITOR is not set, vim will be used by default.
+    If EDITOR is not set, Vim will be used by default.
     Reorder, rename, add, or delete files in the buffer.
-    Do not change the numbered part of the file/directory name, these numbers will be recalculated and are used to match renamed files/directories.
+    Do not change the numbered part of the file/directory name; these numbers will be recalculated and are used to match renamed files/directories.
     Save and exit the editor.
     Then the program with perform the operations to the files/directories in the directory.
     To cancel the operation, save an empty buffer.""")
