@@ -50,14 +50,22 @@ def get_previous_name(files, id):
     return [f for f in files if re.match(f'^{id}[{SEPS}]', f)]
 
 
+ALL = None
 def get_confirmation(message):
-    response = None
+    global ALL
+    response = ALL
     while response is None:
-        answer = input(f'{message} (yes/no): ').lower()
+        answer = input(f'{message} (yes/no/all/quit): ').lower()
         if 'n' in answer:
             response = False
         if 'y' in answer:
             response = True
+        if 'a' in answer:
+            response = True
+            ALL = True
+        if 'q' in answer:
+            response = False
+            ALL = False
     return response
 
 
