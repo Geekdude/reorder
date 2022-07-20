@@ -50,6 +50,17 @@ def get_previous_name(files, id):
     return [f for f in files if re.match(f'^{id}[{SEPS}]', f)]
 
 
+def get_confirmation(message):
+    response = None
+    while response is None:
+        answer = input(f'{message} (yes/no): ').lower()
+        if 'n' in answer:
+            response = False
+        if 'y' in answer:
+            response = True
+    return response
+
+
 def main(argv):
 
     # Create list of choices for separator options
@@ -69,6 +80,7 @@ def main(argv):
     parser.add_argument('directory', help='The target directory')
     parser.add_argument('-a', '--add', help='Add unnumbered files to numbering', dest='add', action='store_true')
     parser.add_argument('-n', '--nono', help='Do not make changes', action='store_true')
+    parser.add_argument('-i', '--interactive', help='Ask before making the changes', action='store_true')
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
     parser.add_argument('-d', '--directory', help='Operate on directories instead of files', dest='direct', action='store_true')
     parser.add_argument('-f', '--format', help='Number of leading 0', dest='form', type=int, nargs=1, default=[-1])
@@ -76,6 +88,14 @@ def main(argv):
     parser.add_argument('-l', '--filter', help='Filter string for files/directories. This is represented as a single string containing a space-separated list of filters operated on with logical or', type=str, nargs=1, default=[''])
     parser.add_argument('-s', '--separator', help='Character to separate the number from the file/directory name. The none option will either choose whatever is already used in the directory or default to _', choices=sep_choices, type=str, nargs=1, default=['none'])
     args = parser.parse_args(argv[1:])
+
+    # Set verbose if nono is set.
+    if args.nono:
+        args.verbose = True
+
+    # Do not need to ask if nono.
+    if args.nono and args.interactive:
+        args.interactive = False
 
     # Variables to hold program statistics
     renamed = 0
@@ -150,10 +170,12 @@ def main(argv):
             old_name = get_previous_name(files, id)
             if len(old_name) == 1:
                 if (args.update or old_name[0] != f or int(id) != count):
-                    if not args.nono:
+                    confirm = True if not args.interactive else get_confirmation(f'Rename {old_name[0]} to {count:0{max_num}d}{sep}{name}?')
+                    if not args.nono and confirm:
                         os.rename(path.join(directory, old_name[0]), path.join(directory, f'{count:0{max_num}d}{sep}{name}'))
-                    renamed += 1
-                    if (args.verbose):
+                    if confirm:
+                        renamed += 1
+                    if (args.verbose and confirm):
                         print(f'Renamed: {old_name[0]} to {count:0{max_num}d}{sep}{name}.')
             else:
                 print(f'Could not rename {name} since multiple old files match.')
@@ -167,36 +189,41 @@ def main(argv):
             # Check is already exists
             if f in unnumbered_files or f in files:
                 # Rename existing file
-                if not args.nono:
+                confirm = True if not args.interactive else get_confirmation(f'Rename {f} to {count:0{max_num}d}{sep}{f}?')
+                if not args.nono and confirm:
                     os.rename(path.join(directory, f), path.join(directory, f'{count:0{max_num}d}{sep}{f}'))
-                renamed += 1
-                if (args.verbose):
+                if confirm:
+                    renamed += 1
+                if (args.verbose and confirm):
                     print(f'Renamed: {f} to {count:0{max_num}d}{sep}{f}.')
                 if f in files:
                     files.remove(f)
             else:
                 # New file or directory
-                if not args.nono:
+                confirm = True if not args.interactive else get_confirmation(f'Add {count:0{max_num}d}{sep}{f}?')
+                if not args.nono and confirm:
                     if not args.direct:
                         open(path.join(directory, f'{count:0{max_num}d}{sep}{f}'), 'w').close()
                     else:
                         os.mkdir(path.join(directory, f'{count:0{max_num}d}{sep}{f}'), RIGHTS)
-
-                added += 1
-                if (args.verbose):
+                if confirm:
+                    added += 1
+                if (args.verbose and confirm):
                     print(f'Added: {count:0{max_num}d}{sep}{f}.')
 
         count += 1
 
     # Delete
     for f in files:
-        if not args.nono:
+        confirm = True if not args.interactive else get_confirmation(f'Delete {f}?')
+        if not args.nono and confirm:
             if not args.direct:
                 os.remove(path.join(directory, f))
             else:
                 shutil.rmtree(path.join(directory, f))
-        deleted += 1
-        if (args.verbose):
+        if confirm:
+            deleted += 1
+        if (args.verbose and confirm):
             print(f'Deleted: {f}.')
 
     # Print statistics
