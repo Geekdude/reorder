@@ -93,6 +93,7 @@ def main(argv):
     parser.add_argument('-d', '--directory', help='Operate on directories instead of files', dest='direct', action='store_true')
     parser.add_argument('-f', '--format', help='Number of leading 0', dest='form', type=int, nargs=1, default=[-1])
     parser.add_argument('-u', '--update', help='Force rename all files', action='store_true')
+    parser.add_argument('--remove', help='Remove numbering and exit.', action='store_true')
     parser.add_argument('-l', '--filter', help='Filter string for files/directories. This is represented as a single string containing a space-separated list of filters operated on with logical or', type=str, nargs=1, default=[''])
     parser.add_argument('-s', '--separator', help='Character to separate the number from the file/directory name. The none option will either choose whatever is already used in the directory or default to _', choices=sep_choices, type=str, nargs=1, default=['none'])
     args = parser.parse_args(argv[1:])
@@ -145,6 +146,23 @@ def main(argv):
                 unnumbered_files.append(f)
 
         files = numbered_files
+
+    # If remove numbers
+    if args.remove:
+        for f in numbered_files:
+            match = re.match(f'^(\d*)[{SEPS}](.*)$', f)
+            if match:
+                name = match[0]
+                new_name = match[2]
+                if new_name:
+                    confirm = True if not args.interactive else get_confirmation(f'Rename {name} to {new_name}?')
+                    if not args.nono and confirm:
+                        os.rename(path.join(directory, name), path.join(directory, new_name))
+                    if confirm:
+                        renamed += 1
+                    if (args.verbose and confirm):
+                        print(f'Renamed: {name} to {new_name}.')
+        return None
 
     # Create vim buffer content
     buf = '\n'.join(files)
