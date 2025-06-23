@@ -47,7 +47,7 @@ def list_dirs(d):
 
 def get_previous_name(files, id):
     'Get the matching name from the previous files list'
-    return [f for f in files if re.match(f'^{id}[{SEPS}]', f)]
+    return [f for f in files if re.match(rf'^{id}[{SEPS}]', f)]
 
 
 ALL = None
@@ -128,7 +128,7 @@ def main(argv):
     # Get separator
     if args.separator[0] == 'none':
         try:
-            sep = re.match(f'^(\d*)([{SEPS}])(.*)$', files[0])[2]
+            sep = re.match(rf'^(\d*)([{SEPS}])(.*)$', files[0])[2]
         except:
             sep = '_'
     else:
@@ -139,7 +139,7 @@ def main(argv):
     numbered_files = []
     if not args.add:
         for f in files:
-            match = re.match(f'^(\d*)[{SEPS}](.*)$', f)
+            match = re.match(rf'^(\d*)[{SEPS}](.*)$', f)
             if match:
                 numbered_files.append(f)
             else:
@@ -150,7 +150,7 @@ def main(argv):
     # If remove numbers
     if args.remove:
         for f in numbered_files:
-            match = re.match(f'^(\d*)[{SEPS}](.*)$', f)
+            match = re.match(rf'^(\d*)[{SEPS}](.*)$', f)
             if match:
                 name = match[0]
                 new_name = match[2]
@@ -189,7 +189,7 @@ def main(argv):
 
     for f in new_files:
         # Rename
-        match = re.match(f'^(\d*)[{SEPS}](.*)$', f)
+        match = re.match(rf'^(\d*)[{SEPS}](.*)$', f)
         if match:
             id = match[1]
             name = match[2]
